@@ -49,7 +49,7 @@ HCSR04 distanceSensor = {
 };
 
 void HCSR04_Init(HCSR04* hcsr04) {
-	//HAL_TIM_IC_Start_IT(hcsr04->echoTimer, hcsr04->echoChannel);
+	HAL_TIM_IC_Start_IT(hcsr04->echoTimer, hcsr04->echoChannel);
 	HAL_TIM_PWM_Start(hcsr04->trigTimer, hcsr04->trigChannel);
 }
 
@@ -138,8 +138,8 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim) {
 			avg /= 8;
 			val = avg;
 
-			int len = sprintf((char*)buf, "Distance: %li\r\n", avg);
-			HAL_UART_Transmit(&huart3, (uint8_t*)buf, len, 9999);
+			//int len = sprintf((char*)buf, "Distance: %li\r\n", avg);
+			//HAL_UART_Transmit(&huart3, (uint8_t*)buf, len, 9999);
 			//valIdx = 0;
 
 			if (avg < 20) {
@@ -250,21 +250,32 @@ int main(void)
   MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
   HCSR04_Init(&distanceSensor);
-  //HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_4);
+  HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_4);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-
+  int buzzer = 0;
+  uint32_t lasttick = HAL_GetTick();
   while (1)
   {
-	  SegmentDisplay_Write(&display, 7);
-	//HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_4);
-	//HAL_Delay(buzzerDelay1);
-	//if (buzzerDelay2 > 0){
-	//	HAL_TIM_PWM_Stop(&htim2, TIM_CHANNEL_4);
-	//	HAL_Delay(buzzerDelay2);
-	//}
+	SegmentDisplay_Write(&display, val);
+	uint32_t currenttick = HAL_GetTick();
+	if (buzzer == 0 && currenttick - lasttick > buzzerDelay1){
+		buzzer = 1;
+		lasttick = currenttick;
+		HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_4);
+		}
+	else if(buzzer == 1 && buzzerDelay2 > 0 && currenttick - lasttick > buzzerDelay2){
+		buzzer = 0;
+		lasttick = currenttick;
+		HAL_TIM_PWM_Stop(&htim2, TIM_CHANNEL_4);
+		}
+//	HAL_Delay(buzzerDelay1);
+//	if (buzzerDelay2 > 0){
+//		HAL_TIM_PWM_Stop(&htim2, TIM_CHANNEL_4);
+//		HAL_Delay(buzzerDelay2);
+//	}
 
     /* USER CODE END WHILE */
 
