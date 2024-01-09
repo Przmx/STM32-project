@@ -271,11 +271,6 @@ int main(void)
 		lasttick = currenttick;
 		HAL_TIM_PWM_Stop(&htim2, TIM_CHANNEL_4);
 		}
-//	HAL_Delay(buzzerDelay1);
-//	if (buzzerDelay2 > 0){
-//		HAL_TIM_PWM_Stop(&htim2, TIM_CHANNEL_4);
-//		HAL_Delay(buzzerDelay2);
-//	}
 
     /* USER CODE END WHILE */
 
