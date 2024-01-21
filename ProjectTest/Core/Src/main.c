@@ -54,7 +54,7 @@ void HCSR04_Init(HCSR04* hcsr04) {
 }
 
 uint32_t HCSR04_Read(HCSR04* hcsr04) {
-	return HAL_TIM_ReadCapturedValue(hcsr04->echoTimer, hcsr04->echoChannel) / 58;
+	return HAL_TIM_ReadCapturedValue(hcsr04->echoTimer, hcsr04->echoChannel) / (58*2);
 }
 
 typedef struct SegmentDisplay {
@@ -169,7 +169,6 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim) {
 				buzzerDelay2 = 3 * avg;
 			}
 
-		//}
 	}
 }
 /* USER CODE END PTD */

@@ -391,7 +391,7 @@ uint32_t HCSR04_Read(HCSR04* hcsr04) {
  8000536:	b082      	sub	sp, #8
  8000538:	af00      	add	r7, sp, #0
  800053a:	6078      	str	r0, [r7, #4]
-	return HAL_TIM_ReadCapturedValue(hcsr04->echoTimer, hcsr04->echoChannel) / 58;
+	return HAL_TIM_ReadCapturedValue(hcsr04->echoTimer, hcsr04->echoChannel) / (58*2);
  800053c:	687b      	ldr	r3, [r7, #4]
  800053e:	681a      	ldr	r2, [r3, #0]
  8000540:	687b      	ldr	r3, [r7, #4]
@@ -402,7 +402,7 @@ uint32_t HCSR04_Read(HCSR04* hcsr04) {
  800054c:	4603      	mov	r3, r0
  800054e:	4a04      	ldr	r2, [pc, #16]	; (8000560 <HCSR04_Read+0x2c>)
  8000550:	fba2 2303 	umull	r2, r3, r2, r3
- 8000554:	095b      	lsrs	r3, r3, #5
+ 8000554:	099b      	lsrs	r3, r3, #6
 }
  8000556:	4618      	mov	r0, r3
  8000558:	3708      	adds	r7, #8
@@ -732,10 +732,10 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim) {
  8000790:	4b3c      	ldr	r3, [pc, #240]	; (8000884 <HAL_TIM_IC_CaptureCallback+0x1ec>)
  8000792:	2200      	movs	r2, #0
  8000794:	601a      	str	r2, [r3, #0]
+				buzzerDelay1 = 3 * avg;
 				buzzerDelay2 = 3 * avg;
 			}
 
-		//}
 	}
 }
  8000796:	e061      	b.n	800085c <HAL_TIM_IC_CaptureCallback+0x1c4>
